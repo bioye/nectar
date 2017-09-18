@@ -79,8 +79,9 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
-		</dependency><!-- https://mvnrepository.com/artifact/com.heroku.sdk/heroku-maven-plugin -->
+		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/com.heroku.sdk/heroku-maven-plugin -->
 		<dependency>
 		    <groupId>com.heroku.sdk</groupId>
 		    <artifactId>heroku-maven-plugin</artifactId>
@@ -108,12 +109,31 @@
 			          </includes>
 			          <jdkVersion>1.8</jdkVersion>
 			          <processTypes>
-			              <web>java $JAVA_OPTS -Dserver.port=$PORT -jar ${full-artifact-name}</web>
+			              <web>java $JAVA_OPTS -jar ${full-artifact-name}</web>
 			          </processTypes>
 	            </configuration>
 	        </plugin>
 		</plugins>
 	</build>
+	<profiles>
+        <profile>
+            <id>heroku</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <build.profile.id>heroku</build.profile.id>
+                <profileActive>heroku</profileActive>
+            </properties>
+        </profile>
+        <profile>
+            <id>eclipse</id>
+            <properties>
+                <build.profile.id>eclipse</build.profile.id>
+                <profileActive>eclipse</profileActive>
+            </properties>
+        </profile>
+    </profiles>
 
 
 	<description>Software Platform for Inclusive Democratic Governance</description>
