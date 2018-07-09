@@ -1,4 +1,4 @@
-package com.lunatech.airportsandrunways;
+package com.lunatech.airportsandrunways.model;
 
 import java.io.Serializable;
 

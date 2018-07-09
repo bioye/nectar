@@ -1,4 +1,4 @@
-package com.lunatech.airportsandrunways;
+package com.lunatech.airportsandrunways.repository;
 
 import java.util.List;
 import java.util.Map;
@@ -6,6 +6,8 @@ import java.util.Map;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import com.lunatech.airportsandrunways.model.Runway;
 @Repository("runwayRepository")
 public interface RunwayRepository extends JpaRepository<Runway, Integer> {
 	List<Runway> findByAirportId(int id);

@@ -1,4 +1,4 @@
-package com.lunatech.airportsandrunways;
+package com.lunatech.airportsandrunways.repository;
 
 import java.util.List;
 import java.util.Map;
@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import com.lunatech.airportsandrunways.model.Country;
 
 @Repository("countryRepository")
 public interface CountryRepository extends JpaRepository<Country, Integer> {

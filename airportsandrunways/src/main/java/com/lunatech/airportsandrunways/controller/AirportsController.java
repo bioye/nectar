@@ -1,4 +1,4 @@
-package com.lunatech.airportsandrunways;
+package com.lunatech.airportsandrunways.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.lunatech.airportsandrunways.model.Airport;
+import com.lunatech.airportsandrunways.model.Country;
+import com.lunatech.airportsandrunways.model.Runway;
+import com.lunatech.airportsandrunways.model.SuggestionWrapper;
+import com.lunatech.airportsandrunways.service.AirportService;
+import com.lunatech.airportsandrunways.service.CountryService;
+import com.lunatech.airportsandrunways.service.RunwayService;
 
 @Controller
 public class AirportsController {

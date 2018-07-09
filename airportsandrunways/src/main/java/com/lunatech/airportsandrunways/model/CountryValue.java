@@ -1,4 +1,4 @@
-package com.lunatech.airportsandrunways;
+package com.lunatech.airportsandrunways.model;
 
 public class CountryValue {
 	

@@ -1,4 +1,4 @@
-package com.lunatech.airportsandrunways;
+package com.lunatech.airportsandrunways.model;
 
 import java.util.ArrayList;
 import java.util.List;

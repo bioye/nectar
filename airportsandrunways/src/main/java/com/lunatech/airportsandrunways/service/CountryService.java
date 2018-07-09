@@ -1,7 +1,9 @@
-package com.lunatech.airportsandrunways;
+package com.lunatech.airportsandrunways.service;
 
 import java.util.List;
 import java.util.Map;
+
+import com.lunatech.airportsandrunways.model.Country;
 
 public interface CountryService {
 	

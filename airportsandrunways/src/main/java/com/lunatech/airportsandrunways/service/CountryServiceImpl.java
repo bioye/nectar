@@ -1,10 +1,13 @@
-package com.lunatech.airportsandrunways;
+package com.lunatech.airportsandrunways.service;
 
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.lunatech.airportsandrunways.model.Country;
+import com.lunatech.airportsandrunways.repository.CountryRepository;
 
 @Service("countryService")
 public class CountryServiceImpl implements CountryService {

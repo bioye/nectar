@@ -1,6 +1,8 @@
-package com.lunatech.airportsandrunways;
+package com.lunatech.airportsandrunways.service;
 
 import java.util.List;
+
+import com.lunatech.airportsandrunways.model.Airport;
 
 public interface AirportService {
 	
