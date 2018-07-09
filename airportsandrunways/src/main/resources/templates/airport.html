@@ -1,27 +1,62 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="ISO-8859-1">
+<head th:replace="header :: head(~{:: title}, ~{:: link})">
 <title>Query and Reports</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
-	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-	<script src="/js/datatable.js"></script>
-</head>
-<body>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="List of Runways in this Airport" />
+<meta name="author" content="Abioye Bankole" />
+<link class="custom-link" rel="icon" href="favicon.ico" />
+<!-- Bootstrap core CSS -->
+<link class="custom-link"
+	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous" />
 
-	<h4><span th:text="${airport.name}"></h4>
-	
-<table>
-  <tr>
-    <th>Runways</th>
-  </tr>
-  <tr th:each="runway,iter : ${runways}">
-    <td th:text="${runway.id}"></td>			
-  </tr>
-</table>
+<link class="custom-link" th:href="@{css/style.css}" rel="stylesheet" />
+</head>
+<body class="gray-bg">
+	<div>
+		<div th:replace="header :: header">
+			<!-- ============================================================================ -->
+			<!-- This content is only used for static prototyping purposes (natural templates)-->
+			<!-- and is therefore entirely optional, as this markup fragment will be included -->
+			<!-- from "fragments/header.html" at runtime.                                     -->
+			<!-- ============================================================================ -->
+			<div class="navbar navbar-inverse navbar-fixed-top">
+				<div class="container">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="#">Static header</a>
+					</div>
+					<div class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li class="active"><a href="#">Home</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div>
+		<br/>
+		<br/>
+		<br/>
+			<h4>
+				<span th:text="${airport.name}">
+			</h4>
+
+			<table>
+				<tr>
+					<th>Runways</th>
+				</tr>
+				<tr th:each="runway,iter : ${runways}">
+					<td th:text="${runway.id}"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
 </body>
 </html>

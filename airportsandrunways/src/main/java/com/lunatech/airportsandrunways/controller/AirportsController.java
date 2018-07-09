@@ -50,7 +50,7 @@ public class AirportsController {
 	 * @return
 	 */
 	@GetMapping("/reports")
-	public ModelAndView query() {
+	public ModelAndView reports() {
 		List<Map<String, Integer>> countriesWithMost = countryService.getCountriesWithMostAirports();//PageRequest.of(0, 10)).getContent(
 		List<Map<String, Integer>> countriesWithLeast = countryService.getCountriesWithLeastAirports();
 		List<String> runwaySurfaces = runwayService.getDistinctSurfaces();
@@ -64,6 +64,88 @@ public class AirportsController {
 		modelAndView.setViewName("reports");
 		return modelAndView;
 	}
+
+	/**
+	 * Choosing Reports will print 
+	 * 1.  10 countries with highest number of airports 
+	 * (with count) and countries with lowest number of airports.
+	 * 2.  Type of runways (as indicated in "surface" column) per country
+	 * 3.  Bonus: Print the top 10 most common runway identifications 
+	 * (indicated in "le_ident" column)
+	 * 
+	 * @return
+	 */
+	@GetMapping("/mostreport")
+	public ModelAndView mostreport() {
+		List<Map<String, Integer>> countriesWithMost = countryService.getCountriesWithMostAirports();
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("countriesWithMost", countriesWithMost);
+		modelAndView.setViewName("mostreport");
+		return modelAndView;
+	}
+
+	/**
+	 * Choosing Reports will print 
+	 * 1.  10 countries with highest number of airports 
+	 * (with count) and countries with lowest number of airports.
+	 * 2.  Type of runways (as indicated in "surface" column) per country
+	 * 3.  Bonus: Print the top 10 most common runway identifications 
+	 * (indicated in "le_ident" column)
+	 * 
+	 * @return
+	 */
+	@GetMapping("/fewestreport")
+	public ModelAndView fewestreport() {
+		
+		List<Map<String, Integer>> countriesWithLeast = countryService.getCountriesWithLeastAirports();
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("countriesWithLeast", countriesWithLeast);
+		modelAndView.setViewName("fewestreport");
+		return modelAndView;
+	}
+
+	/**
+	 * Choosing Reports will print 
+	 * 1.  10 countries with highest number of airports 
+	 * (with count) and countries with lowest number of airports.
+	 * 2.  Type of runways (as indicated in "surface" column) per country
+	 * 3.  Bonus: Print the top 10 most common runway identifications 
+	 * (indicated in "le_ident" column)
+	 * 
+	 * @return
+	 */
+	@GetMapping("/surfacesreport")
+	public ModelAndView surfacesreport() {
+		List<String> runwaySurfaces = runwayService.getDistinctSurfaces();
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("runwaySurfaces", runwaySurfaces);
+		modelAndView.setViewName("surfacesreport");
+		return modelAndView;
+	}
+
+	/**
+	 * Choosing Reports will print 
+	 * 1.  10 countries with highest number of airports 
+	 * (with count) and countries with lowest number of airports.
+	 * 2.  Type of runways (as indicated in "surface" column) per country
+	 * 3.  Bonus: Print the top 10 most common runway identifications 
+	 * (indicated in "le_ident" column)
+	 * 
+	 * @return
+	 */
+	@GetMapping("/identsreport")
+	public ModelAndView identsreport() {
+		List<Map<Integer, Integer>> commonRunwayIdentifications = runwayService.getCommonIdentifications();
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("identifications", commonRunwayIdentifications);
+		modelAndView.setViewName("identsreport");
+		return modelAndView;
+	}
+	
 	  // http://localhost:8080
 	  // basic site
 	  @GetMapping("/")
@@ -112,7 +194,7 @@ public class AirportsController {
 	 * @return
 	 */
 	@PostMapping("/query")
-	public ModelAndView reports(ModelAndView modelAndView, @RequestParam(required=false,name="autocomplete-input") String countryName) {
+	public ModelAndView query(ModelAndView modelAndView, @RequestParam(required=false,name="autocomplete-input") String countryName) {
 		//List<Airport>airports = airportService.getAirportByCode(countryName);
 		System.out.println("countryName: " +countryName);
 		Country country = countryService.getCountryByName(countryName);

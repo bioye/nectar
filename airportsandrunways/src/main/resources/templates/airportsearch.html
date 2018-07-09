@@ -1,10 +1,22 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="header :: head(~{:: title}, ~{:: link})">
+  <title th:text="${title}"></title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title th:text="${title}"></title>
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->>
+<meta name="description" content="List of Runways in this Airport" />
+<meta name="author" content="Abioye Bankole" />
+<link class="custom-link" rel="icon" href="favicon.ico" />
+<!-- Bootstrap core CSS -->
+<link class="custom-link"
+	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous" />
 
+<link class="custom-link" th:href="@{css/style.css}" rel="stylesheet" />
+ 
   <!-- JQuery -->
   <script type="text/javascript" th:src="@{/js/jquery-3.2.0.min.js}"></script>
   <!--Import https://www.devbridge.com/sourcery/components/jquery-autocomplete/#-->
@@ -35,7 +47,31 @@
 
   </script>
 </head>
-<body>
+<body class="gray-bg">
+	<div>
+		<div th:replace="header :: header">
+			<!-- ============================================================================ -->
+			<!-- This content is only used for static prototyping purposes (natural templates)-->
+			<!-- and is therefore entirely optional, as this markup fragment will be included -->
+			<!-- from "fragments/header.html" at runtime.                                     -->
+			<!-- ============================================================================ -->
+			<div class="navbar navbar-inverse navbar-fixed-top">
+				<div class="container">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="#">Static header</a>
+					</div>
+					<div class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li class="active"><a href="#">Home</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div>
+		<br/>
+		<br/>
+		<br/>
 <h4>Query</h4>
         
 	<form th:action="@{/query}" method="POST">
