@@ -3,8 +3,10 @@ package com.lunatech.airportsandrunways.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.lunatech.airportsandrunways.model.Airport;
 import com.lunatech.airportsandrunways.model.Country;
+import com.lunatech.airportsandrunways.model.Pager;
 import com.lunatech.airportsandrunways.model.Runway;
 import com.lunatech.airportsandrunways.model.SuggestionWrapper;
 import com.lunatech.airportsandrunways.service.AirportService;
@@ -31,6 +34,11 @@ public class AirportsController {
 	private CountryService countryService;
 	private AirportService airportService;
 	private RunwayService runwayService;
+	
+    private static final int BUTTONS_TO_SHOW = 3;
+    private static final int INITIAL_PAGE = 0;
+    private static final int INITIAL_PAGE_SIZE = 5;
+    private static final int[] PAGE_SIZES = { 5, 10};
 	
 	@Autowired
 	public AirportsController(CountryService countryService, AirportService airportService, RunwayService runwayService) {
@@ -194,21 +202,62 @@ public class AirportsController {
 	 * @return
 	 */
 	@PostMapping("/query")
-	public ModelAndView query(ModelAndView modelAndView, @RequestParam(required=false,name="autocomplete-input") String countryName) {
-		//List<Airport>airports = airportService.getAirportByCode(countryName);
+	public ModelAndView query(ModelAndView modelAndView, 
+			@RequestParam(required=false,name="autocomplete-input") String countryName,
+			@RequestParam("pageSize") Optional<Integer> pageSize,
+            @RequestParam("page") Optional<Integer> page) {
+		//List<Airport>airports = airportService.getAirportByCode(countryName);		
+
+        //
+        // Evaluate page size. If requested parameter is null, return initial
+        // page size
+        int evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE);
+        // Evaluate page. If requested parameter is null or less than 0 (to
+        // prevent exception), return initial size. Otherwise, return value of
+        // param. decreased by 1.
+        int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
+        
+		
 		System.out.println("countryName: " +countryName);
 		Country country = countryService.getCountryByName(countryName);
 		System.out.println("country: " +country);
+		
+		
+		Page<Airport> airports = airportService.findByCountryCode(country.getCode(), PageRequest.of(evalPage, evalPageSize));
+		Pager pager = new Pager(airports.getTotalPages(),airports.getNumber(),BUTTONS_TO_SHOW);
+		modelAndView.addObject("country", country);
+		modelAndView.addObject("airports", airports);
+        // evaluate page size
+        modelAndView.addObject("selectedPageSize", evalPageSize);
+        // add page sizes
+        modelAndView.addObject("pageSizes", PAGE_SIZES);
+        // add pager
+        modelAndView.addObject("pager", pager);
+		
+		return modelAndView;
+	}
+	/*@PostMapping("/query_")
+	public ModelAndView query_(ModelAndView modelAndView, 
+			@RequestParam(required=false,name="autocomplete-input") String countryName) {
+		
+		//List<Airport>airports = airportService.getAirportByCode(countryName);	
+		
+		System.out.println("countryName: " +countryName);
+		Country country = countryService.getCountryByName(countryName);
+		System.out.println("country: " +country);
+		
+		
 		List<Airport> airports = airportService.findByCountryCode(country.getCode());
 		modelAndView.addObject("country", country);
 		modelAndView.addObject("airports", airports);
 		
 		return modelAndView;
-	}
+	}*/
 	
 	@GetMapping("/airport/{id}")
 	public ModelAndView airport(@PathVariable Integer id){
-		Airport airport = airportService.getAirportById(id);
+		Optional<Airport> airportOptional = airportService.getAirportById(id);
+		Airport airport=airportOptional.get();
 		List<Runway> runways = runwayService.getRunwayByAirportId(airport.getId());
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("airport", airport);

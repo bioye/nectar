@@ -1,13 +1,14 @@
 package com.lunatech.airportsandrunways.repository;
 
-import java.util.List;
-
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import com.lunatech.airportsandrunways.model.Airport;
 
 @Repository("airportRepository")
-public interface AirportRepository extends JpaRepository<Airport, Integer> {
-	List<Airport> findByCountryCode(String code);	
+public interface AirportRepository extends PagingAndSortingRepository<Airport, Integer> {
+	//List<Airport> findByCountryCode(String code);	
+	Page<Airport> findByCountryCode(String code, Pageable pageable);	
 }

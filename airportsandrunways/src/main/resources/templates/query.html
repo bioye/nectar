@@ -47,7 +47,91 @@
 		
 	<h4><span th:text="${country.name}"></h4>
 	
-<table>
+	
+        <div class="row">
+            <table class="table datatable">
+                <thead>
+                    <tr>
+                        <th>Airports</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="airport : ${airports}">
+                        <td>
+    						<a href="airport.html" th:href="@{/airport/{id}(id=${airport.id})}">
+    						<span th:text="${airport.name}"></span></a>
+    					</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="row">
+                <div class="form-group col-md-1">
+                    <select class="form-control pagination" id="pageSizeSelect">
+                        <option th:each="pageSize : ${pageSizes}" th:text="${pageSize}"
+                            th:value="${pageSize}"
+                            th:selected="${pageSize} == ${selectedPageSize}"></option>
+                    </select>
+                </div>
+                <div th:if="${airports.totalPages != 1}"
+                    class="form-group col-md-11 pagination-centered">
+                    <ul class="pagination">
+                        <li th:class="${airports.number == 0} ? disabled"><a
+                            class="pageLink"
+                            th:href="@{/(pageSize=${selectedPageSize}, page=1)}">«</a>
+                        </li>
+                        <li th:class="${airports.number == 0} ? disabled"><a
+                            class="pageLink"
+                            th:href="@{/(pageSize=${selectedPageSize}, page=${airports.number})}">←</a>
+                        </li>
+                        <li
+                            th:class="${airports.number == (page - 1)} ? 'active pointer-disabled'"
+                            th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+                            <a class="pageLink"
+                            th:href="@{/(pageSize=${selectedPageSize}, page=${page})}"
+                            th:text="${page}"></a>
+                        </li>
+                        <li
+                            th:class="${airports.number + 1 == airports.totalPages} ? disabled">
+                            <a class="pageLink"
+                            th:href="@{/(pageSize=${selectedPageSize}, page=${airports.number + 2})}">→</a>
+                        </li>
+                        <li
+                            th:class="${airports.number + 1 == airports.totalPages} ? disabled">
+                            <a class="pageLink"
+                            th:href="@{/(pageSize=${selectedPageSize}, page=${airports.totalPages})}">»</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+	
+	
+	
+        <script
+  src="https://code.jquery.com/jquery-1.11.1.min.js"
+  integrity="sha256-VAvG3sHdS5LqTT+5A/aeq/bZGa/Uj04xKxY8KM/w9EE="
+  crossorigin="anonymous"></script>
+    <script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function() {
+    changePageAndSize();
+});
+function changePageAndSize() {
+    $('#pageSizeSelect').change(function(evt) {
+        window.location.replace("/?pageSize=" + this.value + "&page=1");
+    });
+}
+        /*]]>*/
+    </script>
+	
+	
+	
+<!-- <table>
   <tr>
     <th>Airports</th>
   </tr>
@@ -57,6 +141,6 @@
     </td>
 			
   </tr>
-</table>
+</table> -->
 </body>
 </html>

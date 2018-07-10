@@ -1,14 +1,17 @@
 package com.lunatech.airportsandrunways.service;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.lunatech.airportsandrunways.model.Airport;
 
 public interface AirportService {
 	
-	public List<Airport> getAllAirports();
-	public Airport  getAirportById(int id);
-	public List<Airport> findByCountryCode(String code);
-	//public List<String> getAllAirportTypes();
-	//public List<String> getUniqueTypes();
+	//public Iterable<Airport> getAllAirports();
+	public Optional<Airport>  getAirportById(int id);
+	//public List<Airport> findByCountryCode(String code);
+	Page<Airport> findByCountryCode(String code, Pageable pageable);
 }
