@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <!-- <head th:fragment="head(title, links, scripts)"> -->
+  <head th:fragment="head(title, links)">
+  <!-- <head th:fragment="head"> -->
+    <link th:href="@{../css/bootstrap.min.css}" rel="stylesheet"/>
+	<link th:href="@{../css/layout.css}" rel="stylesheet" />
+	<script th:src="@{../js/layout.js}"></script>
+  <!-- JQuery -->
+  <script type="text/javascript" th:src="@{../js/jquery-3.2.0.min.js}"></script>
+  <!--Import https://www.devbridge.com/sourcery/components/jquery-autocomplete/#-->
+  <script type="text/javascript" th:src="@{../js/jquery.autocomplete.js}"></script>
+  <!-- Compiled and minified JavaScript -->
+  <script type="text/javascript" th:src="@{../js/materialize.min.js}"></script>
+    <!--/* Per-page placeholder for additional scripts */-->
+    <!-- <th:block th:replace="${scripts}" /> -->
+	<!--/* Per-page placeholder for additional links */-->
+    <th:block th:replace="${links}" />
+    <!-- <title th:text="${title}">Template</title> -->
+    <title th:replace="${title}">Template</title>
+  <script>
+
+
+    $(document).ready(function() {
+
+      $('#autocomplete-input').devbridgeAutocomplete({
+          serviceUrl: '/autoreports',
+          paramName: 'airportstr',
+          minChars: 1,
+          autoSelectFirst: true,
+      });
+
+    });
+
+
+  </script>
+<style>
+.pagination-centered {
+    text-align: center;
+}
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+.pointer-disabled {
+    pointer-events: none;
+}
+</style>
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <!-- <div class="navbar-collapse collapse"> -->
+        <nav>
+		  <ul id='menu'>
+		    <!-- <li><a class='home' href='/'>HOME</a></li> -->
+		    <li><a class='home' href='../'>QUERY</a></li>
+		    <li><a class='prett' href='#' title='Menu'>REPORTS</a>
+		      <ul class='menus'>
+		        <li><a href='../mostreport' title='Dropdown 1'>Countries with Most Airports</a></li>
+		        <li><a href='../fewestreport' title='Dropdown 2'>Countries with Fewest Airports</a></li>
+		        <li><a href='../surfacesreport' title='Dropdown 3'>Runway Surfaces</a></li>
+		        <li><a href='../identsreport' title='Dropdown 1'>Runway Identifications</a></li>
+		      </ul>
+		    </li>
+		  </ul>
+		</nav>
+        <!-- </div> -->
+      </div>
+    </div>
+  </body>
+</html>
