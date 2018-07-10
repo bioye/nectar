@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
+	
 <head th:replace="header :: head(~{:: title}, ~{:: link})">
-<title>Query and Reports</title>
+<title>Query</title>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -78,28 +79,28 @@
                     <ul class="pagination">
                         <li th:class="${airports.number == 0} ? disabled"><a
                             class="pageLink"
-                            th:href="@{/(pageSize=${selectedPageSize}, page=1)}">«</a>
+                            th:href="@{query(pageSize=${selectedPageSize},countryName=${country.name}, page=1)}">«</a>
                         </li>
                         <li th:class="${airports.number == 0} ? disabled"><a
                             class="pageLink"
-                            th:href="@{/(pageSize=${selectedPageSize}, page=${airports.number})}">←</a>
+                            th:href="@{query(pageSize=${selectedPageSize},countryName=${country.name}, page=${airports.number})}">←</a>
                         </li>
                         <li
                             th:class="${airports.number == (page - 1)} ? 'active pointer-disabled'"
                             th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
                             <a class="pageLink"
-                            th:href="@{/(pageSize=${selectedPageSize}, page=${page})}"
+                            th:href="@{query(pageSize=${selectedPageSize},countryName=${country.name}, page=${page})}"
                             th:text="${page}"></a>
                         </li>
                         <li
                             th:class="${airports.number + 1 == airports.totalPages} ? disabled">
                             <a class="pageLink"
-                            th:href="@{/(pageSize=${selectedPageSize}, page=${airports.number + 2})}">→</a>
+                            th:href="@{query(pageSize=${selectedPageSize}, countryName=${country.name}, page=${airports.number + 2})}">→</a>
                         </li>
                         <li
                             th:class="${airports.number + 1 == airports.totalPages} ? disabled">
                             <a class="pageLink"
-                            th:href="@{/(pageSize=${selectedPageSize}, page=${airports.totalPages})}">»</a>
+                            th:href="@{query(pageSize=${selectedPageSize},countryName=${country.name}, page=${airports.totalPages})}">»</a>
                         </li>
                     </ul>
                 </div>
@@ -118,12 +119,13 @@
         crossorigin="anonymous"></script>
     <script th:inline="javascript">
         /*<![CDATA[*/
+        var countryName = /*[[${country.name}]]*/ 'Country Name';
         $(document).ready(function() {
     changePageAndSize();
 });
 function changePageAndSize() {
     $('#pageSizeSelect').change(function(evt) {
-        window.location.replace("/?pageSize=" + this.value + "&page=1");
+        window.location.replace("query?pageSize=" + this.value + "&countryName=" + countryName + "&page=1");
     });
 }
         /*]]>*/

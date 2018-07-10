@@ -46,6 +46,16 @@ public class AirportsController {
 		this.airportService = airportService;
 		this.runwayService = runwayService;
 	}
+	
+	  // http://localhost:8080
+	  // basic site
+	  @GetMapping("/")
+	  public String autocomplete(ModelAndView modelAndView) {
+		  modelAndView.addObject("title", "airport search");
+		  modelAndView.addObject("autocomplete-input", "");
+	
+	    return "airportsearch";
+	  }
 
 	/**
 	 * Choosing Reports will print 
@@ -153,16 +163,6 @@ public class AirportsController {
 		modelAndView.setViewName("identsreport");
 		return modelAndView;
 	}
-	
-	  // http://localhost:8080
-	  // basic site
-	  @GetMapping("/")
-	  public String autocomplete(ModelAndView modelAndView) {
-		  modelAndView.addObject("title", "airport search");
-		  modelAndView.addObject("autocomplete-input", "");
-	
-	    return "airportsearch";
-	  }
 	  
 	// http://localhost:8080/autoreports?searchstr=bra
 	@RequestMapping(value ="/autoreports", method = RequestMethod.GET, produces ="application/json")
@@ -236,6 +236,36 @@ public class AirportsController {
 		
 		return modelAndView;
 	}
+	
+	@GetMapping("/query")
+	public ModelAndView queryGet(ModelAndView modelAndView, 
+			@RequestParam("countryName") String countryName,
+			@RequestParam("pageSize") Optional<Integer> pageSize,
+            @RequestParam("page") Optional<Integer> page) {
+        // Evaluate page size. If requested parameter is null, return initial
+        // page size
+        int evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE);
+        // Evaluate page. If requested parameter is null or less than 0 (to
+        // prevent exception), return initial size. Otherwise, return value of
+        // param. decreased by 1.
+        int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;		
+		Country country = countryService.getCountryByName(countryName);
+		Page<Airport> airports = airportService.findByCountryCode(country.getCode(), PageRequest.of(evalPage, evalPageSize));
+		System.out.println("country: "+country);
+		System.out.println("airports: "+airports);
+		Pager pager = new Pager(airports.getTotalPages(),airports.getNumber(),BUTTONS_TO_SHOW);
+		modelAndView.addObject("country", country);
+		modelAndView.addObject("airports", airports);
+        // evaluate page size
+        modelAndView.addObject("selectedPageSize", evalPageSize);
+        // add page sizes
+        modelAndView.addObject("pageSizes", PAGE_SIZES);
+        // add pager
+        modelAndView.addObject("pager", pager);
+		modelAndView.setViewName("query");
+		return modelAndView;
+	}
+	
 	/*@PostMapping("/query_")
 	public ModelAndView query_(ModelAndView modelAndView, 
 			@RequestParam(required=false,name="autocomplete-input") String countryName) {
@@ -265,5 +295,4 @@ public class AirportsController {
 		modelAndView.setViewName("airport");
 		return modelAndView;
 	}
-	
 }
