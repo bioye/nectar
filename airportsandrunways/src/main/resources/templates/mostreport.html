@@ -53,7 +53,7 @@
     <th>Countries with highest number of airports</th>
   </tr>  
   <tr th:each="instance : ${countriesWithMost}">
-         <td th:text="${instance.code}">country</td>
+         <td th:text="${instance.name}">country</td>
          <td th:text="${instance.frequency}">frequency</td>			
   </tr>
   

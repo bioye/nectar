@@ -18,18 +18,17 @@ public interface CountryRepository extends JpaRepository<Country, Integer> {
 	
 	@Query(name="airportFreq",
 			nativeQuery=true,
-			value = "select airports.iso_country, count(*) as "
-			+ "frequency from runways inner join "
-			+ "airports on runways.airport_id=airports.id "
-			+ "group by airport_id order by count(*) desc limit 10")
+			value = "select name, count(code)-1 as frequency from " + 
+					"((select name, code from countries) union all " + 
+					"(select null as name, iso_country as code from airports)) countries_airports " + 
+					"group by code order by count(code)-1 desc limit 10")
 	List<Map<String, Integer>> getCountriesWithMostAirports();
 	
 	@Query(name="airportFreq",
 			nativeQuery=true,
-			value = "select airports.iso_country, count(*) as "
-			+ "frequency from runways inner join "
-			+ "airports on runways.airport_id=airports.id "
-			+ "group by airport_id order by count(*) asc limit 10")
-	List<Map<String, Integer>> getCountriesWithLeastAirports();
-	
+			value = "select name, count(code)-1 as frequency from " + 
+					"((select name, code from countries) union all " + 
+					"(select null as name, iso_country as code from airports)) countries_airports " + 
+					"group by code order by count(code)-1 asc limit 10")
+	List<Map<String, Integer>> getCountriesWithLeastAirports();	
 }
