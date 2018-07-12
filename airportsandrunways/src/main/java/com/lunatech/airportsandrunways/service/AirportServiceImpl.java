@@ -29,7 +29,7 @@ public class AirportServiceImpl implements AirportService {
 
 	@Override
 	public Page<Airport> findByCountryCode(String code, Pageable pageable) {
-		return airportRepository.findByCountryCode(code, pageable);
+		return airportRepository.findByCountryCodeOrderByNameAsc(code, pageable);
 	}
 
 }

@@ -96,6 +96,9 @@ public class AirportsController {
 	@GetMapping("/mostreport")
 	public ModelAndView mostreport() {
 		List<Map<String, Integer>> countriesWithMost = countryService.getCountriesWithMostAirports();
+		/*for (int i = 0; i < countriesWithMost.size(); i++) {
+			Map valueMap = countriesWithMost.get(i);
+		}*/
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("countriesWithMost", countriesWithMost);

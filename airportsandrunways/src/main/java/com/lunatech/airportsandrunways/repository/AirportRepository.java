@@ -10,5 +10,5 @@ import com.lunatech.airportsandrunways.model.Airport;
 @Repository("airportRepository")
 public interface AirportRepository extends PagingAndSortingRepository<Airport, Integer> {
 	//List<Airport> findByCountryCode(String code);	
-	Page<Airport> findByCountryCode(String code, Pageable pageable);	
+	Page<Airport> findByCountryCodeOrderByNameAsc(String code, Pageable pageable);	
 }
