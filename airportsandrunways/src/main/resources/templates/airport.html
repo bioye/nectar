@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: head(~{:: title}, ~{:: link})">
-<title>Query and Reports</title>
+<title>Runways in an Airport</title>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -40,23 +40,94 @@
 				</div>
 			</div>
 		</div>
-		<div>
+		<div style="margin-left: 120px;">
 		<br/>
 		<br/>
 		<br/>
 			<h4>
-				<span th:text="${airport.name}">
+				<span th:text="${airport.name}"></span>
 			</h4>
 
-			<table>
+	
+        <div class="row">
+            <table class="table datatable">
+                <thead>
 				<tr>
 					<th>Runways</th>
 				</tr>
+                </thead>
+                <tbody>
 				<tr th:each="runway,iter : ${runways}">
 					<td th:text="${runway.id}"></td>
 				</tr>
-			</table>
-		</div>
-	</div>
+                </tbody>
+            </table>
+            
+            <div class="row">
+                <div class="form-group col-md-1">
+                    <select class="form-control pagination" id="pageSizeSelect">
+                        <option th:each="pageSize : ${pageSizes}" th:text="${pageSize}"
+                            th:value="${pageSize}"
+                            th:selected="${pageSize} == ${selectedPageSize}"></option>
+                    </select>
+                </div>
+                <div th:if="${runways.totalPages != 1}"
+                    class="form-group col-md-11 pagination-centered">
+                    <ul class="pagination">
+                        <li th:class="${runways.number == 0} ? disabled"><a
+                            class="pageLink"
+                            th:href="@{query(pageSize=${selectedPageSize}, page=1)}">«</a>
+                        </li>
+                        <li th:class="${runways.number == 0} ? disabled"><a
+                            class="pageLink"
+                            th:href="@{query(pageSize=${selectedPageSize}, page=${runways.number})}">←</a>
+                        </li>
+                        <li
+                            th:class="${runways.number == (page - 1)} ? 'active pointer-disabled'"
+                            th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+                            <a class="pageLink"
+                            th:href="@{query(pageSize=${selectedPageSize}, page=${page})}"
+                            th:text="${page}"></a>
+                        </li>
+                        <li
+                            th:class="${runways.number + 1 == runways.totalPages} ? disabled">
+                            <a class="pageLink"
+                            th:href="@{query(pageSize=${selectedPageSize}, page=${runways.number + 2})}">→</a>
+                        </li>
+                        <li
+                            th:class="${runways.number + 1 == runways.totalPages} ? disabled">
+                            <a class="pageLink"
+                            th:href="@{query(pageSize=${selectedPageSize}, page=${runways.totalPages})}">»</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+	
+	
+	
+        <script
+  src="https://code.jquery.com/jquery-1.11.1.min.js"
+  integrity="sha256-VAvG3sHdS5LqTT+5A/aeq/bZGa/Uj04xKxY8KM/w9EE="
+  crossorigin="anonymous"></script>
+    <script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function() {
+    changePageAndSize();
+});
+function changePageAndSize() {
+    $('#pageSizeSelect').change(function(evt) {
+        window.location.replace("query?pageSize=" + this.value + "&page=1");
+    });
+}
+        /*]]>*/
+    </script>
+	
 </body>
 </html>

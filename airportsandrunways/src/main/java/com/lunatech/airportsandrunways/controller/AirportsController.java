@@ -57,17 +57,7 @@ public class AirportsController {
 	    return "airportsearch";
 	  }
 
-	/**
-	 * Choosing Reports will print 
-	 * 1.  10 countries with highest number of airports 
-	 * (with count) and countries with lowest number of airports.
-	 * 2.  Type of runways (as indicated in "surface" column) per country
-	 * 3.  Bonus: Print the top 10 most common runway identifications 
-	 * (indicated in "le_ident" column)
-	 * 
-	 * @return
-	 */
-	@GetMapping("/reports")
+	/*@GetMapping("/reports")
 	public ModelAndView reports() {
 		List<Map<String, Integer>> countriesWithMost = countryService.getCountriesWithMostAirports();//PageRequest.of(0, 10)).getContent(
 		List<Map<String, Integer>> countriesWithLeast = countryService.getCountriesWithLeastAirports();
@@ -81,7 +71,7 @@ public class AirportsController {
 		modelAndView.addObject("identifications", commonRunwayIdentifications);
 		modelAndView.setViewName("reports");
 		return modelAndView;
-	}
+	}*/
 
 	/**
 	 * Choosing Reports will print 
@@ -95,13 +85,16 @@ public class AirportsController {
 	 */
 	@GetMapping("/mostreport")
 	public ModelAndView mostreport() {
+		
 		List<Map<String, Integer>> countriesWithMost = countryService.getCountriesWithMostAirports();
+		
 		/*for (int i = 0; i < countriesWithMost.size(); i++) {
 			Map valueMap = countriesWithMost.get(i);
 		}*/
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("countriesWithMost", countriesWithMost);
+        
 		modelAndView.setViewName("mostreport");
 		return modelAndView;
 	}
@@ -119,10 +112,11 @@ public class AirportsController {
 	@GetMapping("/fewestreport")
 	public ModelAndView fewestreport() {
 		
-		List<Map<String, Integer>> countriesWithLeast = countryService.getCountriesWithLeastAirports();
+        List<Map<String, Integer>> countriesWithLeast = countryService.getCountriesWithLeastAirports();
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("countriesWithLeast", countriesWithLeast);
+		
 		modelAndView.setViewName("fewestreport");
 		return modelAndView;
 	}
@@ -138,11 +132,23 @@ public class AirportsController {
 	 * @return
 	 */
 	@GetMapping("/surfacesreport")
-	public ModelAndView surfacesreport() {
-		List<String> runwaySurfaces = runwayService.getDistinctSurfaces();
+	public ModelAndView surfacesreport(
+			@RequestParam("pageSize") Optional<Integer> pageSize,
+            @RequestParam("page") Optional<Integer> page) {
+		
+        int evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE);
+        int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;	
+        
+		Page<String> runwaySurfaces = runwayService.getDistinctSurfaces(PageRequest.of(evalPage, evalPageSize));
+		Pager pager = new Pager(runwaySurfaces.getTotalPages(),runwaySurfaces.getNumber(),BUTTONS_TO_SHOW);
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("runwaySurfaces", runwaySurfaces);
+		
+        modelAndView.addObject("selectedPageSize", evalPageSize);
+        modelAndView.addObject("pageSizes", PAGE_SIZES);
+        modelAndView.addObject("pager", pager);
+        
 		modelAndView.setViewName("surfacesreport");
 		return modelAndView;
 	}
@@ -159,10 +165,12 @@ public class AirportsController {
 	 */
 	@GetMapping("/identsreport")
 	public ModelAndView identsreport() {
-		List<Map<Integer, Integer>> commonRunwayIdentifications = runwayService.getCommonIdentifications();
-		
+        
+        List<Map<Integer, Integer>> commonRunwayIdentifications = runwayService.getCommonIdentifications();
+				
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("identifications", commonRunwayIdentifications);
+        
 		modelAndView.setViewName("identsreport");
 		return modelAndView;
 	}
@@ -241,7 +249,7 @@ public class AirportsController {
 	}
 	
 	@GetMapping("/query")
-	public ModelAndView queryGet(ModelAndView modelAndView, 
+	public ModelAndView queryGet(//ModelAndView modelAndView, 
 			@RequestParam("countryName") String countryName,
 			@RequestParam("pageSize") Optional<Integer> pageSize,
             @RequestParam("page") Optional<Integer> page) {
@@ -257,6 +265,7 @@ public class AirportsController {
 		System.out.println("country: "+country);
 		System.out.println("airports: "+airports);
 		Pager pager = new Pager(airports.getTotalPages(),airports.getNumber(),BUTTONS_TO_SHOW);
+		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("country", country);
 		modelAndView.addObject("airports", airports);
         // evaluate page size
@@ -266,6 +275,32 @@ public class AirportsController {
         // add pager
         modelAndView.addObject("pager", pager);
 		modelAndView.setViewName("query");
+		return modelAndView;
+	}
+	
+	@GetMapping("/airport/{id}")
+	public ModelAndView airport(@PathVariable Integer id, 
+			@RequestParam("pageSize") Optional<Integer> pageSize,
+            @RequestParam("page") Optional<Integer> page){
+		
+        int evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE);
+        int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;		
+        
+		Optional<Airport> airportOptional = airportService.getAirportById(id);
+		Airport airport=airportOptional.get();
+		Page<Runway> runways = runwayService.getRunwayByAirportId(airport.getId(), PageRequest.of(evalPage, evalPageSize));
+
+		Pager pager = new Pager(runways.getTotalPages(), runways.getNumber(),BUTTONS_TO_SHOW);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("airport", airport);
+		modelAndView.addObject("runways", runways);
+		
+        modelAndView.addObject("selectedPageSize", evalPageSize);
+        modelAndView.addObject("pageSizes", PAGE_SIZES);
+        modelAndView.addObject("pager", pager);
+        
+		modelAndView.setViewName("airport");
 		return modelAndView;
 	}
 	
@@ -286,16 +321,4 @@ public class AirportsController {
 		
 		return modelAndView;
 	}*/
-	
-	@GetMapping("/airport/{id}")
-	public ModelAndView airport(@PathVariable Integer id){
-		Optional<Airport> airportOptional = airportService.getAirportById(id);
-		Airport airport=airportOptional.get();
-		List<Runway> runways = runwayService.getRunwayByAirportId(airport.getId());
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("airport", airport);
-		modelAndView.addObject("runways", runways);
-		modelAndView.setViewName("airport");
-		return modelAndView;
-	}
 }

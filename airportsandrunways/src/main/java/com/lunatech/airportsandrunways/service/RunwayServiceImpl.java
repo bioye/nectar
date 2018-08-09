@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.lunatech.airportsandrunways.model.Runway;
@@ -16,13 +18,13 @@ public class RunwayServiceImpl implements RunwayService {
 	private RunwayRepository runwayRepository;
 
 	@Override
-	public List<Runway> getRunwayByAirportId(int id) {
-		return runwayRepository.findByAirportId(id);
+	public Page<Runway> getRunwayByAirportId(int id, Pageable pageable) {
+		return runwayRepository.findByAirportId(id, pageable);
 	}
 
 	@Override
-	public List<String> getDistinctSurfaces() {
-		return runwayRepository.findDistinctSurfaces();
+	public Page<String> getDistinctSurfaces(Pageable pageable) {
+		return runwayRepository.findDistinctSurfaces(pageable);
 	}
 
 	@Override

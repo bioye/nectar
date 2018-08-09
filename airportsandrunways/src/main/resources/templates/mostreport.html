@@ -41,22 +41,26 @@
 				</div>
 			</div>
 		</div>
-		<div>
-		<br/>
-		<br/>
-		<br/>
-		
-	<h4>Reports</h4>
-	
-<table>
-  <tr>
-    <th>Countries with highest number of airports</th>
-  </tr>  
-  <tr th:each="instance : ${countriesWithMost}">
-         <td th:text="${instance.name}">country</td>
-         <td th:text="${instance.frequency}">frequency</td>			
-  </tr>
-  
-</table>
+		<div style="margin-left: 220px;margin-right: 420px;">
+			<br /> <br /> <br />
+
+			<h4>Countries with highest number of airports</h4>
+			<div class="row">
+				<table class="table datatable">
+					<thead>
+						<tr>
+							<th>Country</th>
+							<th>Frequency</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="instance : ${countriesWithMost}">
+							<td th:text="${instance.name}">country</td>
+         					<td align="right" th:text="${#numbers.formatDecimal(instance.frequency, 0, 'COMMA',0, 'POINT')}">frequency</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 </body>
 </html>

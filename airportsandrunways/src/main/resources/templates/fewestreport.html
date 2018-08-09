@@ -40,23 +40,27 @@
 				</div>
 			</div>
 		</div>
-		<div>
-		<br/>
-		<br/>
-		<br/>
-		
-	<h4>Reports</h4>
-	
-<table>
-  <tr>
-    <th>Countries with least number of airports</th>
-  </tr>  
-  <tr th:each="instance : ${countriesWithLeast}">
-         <td th:text="${instance.name}">country</td>
-         <td th:text="${instance.frequency}">frequency</td>			
-  </tr>
-  
-</table>
+		<div style="margin-left: 220px;margin-right: 420px;">
+			<br/> <br/> <br/>
 
+			<h4>Countries with least number of airports</h4>
+			<div class="row">
+				<table class="table datatable">
+					<thead>
+						<tr>
+							<th>Country</th>
+							<th>Frequency</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="instance : ${countriesWithLeast}">
+							<td th:text="${instance.name}">country</td>
+							<td align=right th:text="${instance.frequency}">frequency</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		</div>
 </body>
 </html>

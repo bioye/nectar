@@ -40,22 +40,28 @@
 				</div>
 			</div>
 		</div>
-		<div>
-		<br/>
-		<br/>
-		<br/>
-		
-	<h4>Reports</h4>
-<table>
-  <tr>
-    <th>Common Runway Identifications</th>
-  </tr>   
-  <tr th:each="instance : ${identifications}">
-         <td th:text="${instance.le_ident}">identification</td>
-         <td th:text="${instance.frequency}">frequency</td>			
-  </tr>
-  
-</table>
+		<div style="margin-left: 220px; margin-right: 620px;">
+			<br /> <br /> <br />
 
+			<h4>Common Runway Identifications</h4>
+			<div class="row">
+				<table class="table datatable">
+					<thead>
+						<tr>
+							<th>Identification</th>
+							<th>Frequency</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="instance : ${identifications}">
+							<td align=right th:text="${instance.le_ident}">identification</td>
+							<td align=right
+								th:text="${#numbers.formatDecimal(instance.frequency, 0, 'COMMA',0, 'POINT')}">frequency</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
